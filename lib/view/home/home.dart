@@ -32,22 +32,12 @@ class Home extends ConsumerWidget {
               child: Column(
                 children: [
                   homeImage(),
-                  FutureBuilder<List<Product>>(
-                    future: ProductRepo().fetchProduct(http.Client()),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return const Center(
-                          child: Text('An error has occurred!'),
-                        );
-                      } else if (snapshot.hasData) {
-                        return HomeProduct(
-                            constraints: constraint, products: snapshot.data!);
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
+                  products.when(
+                    data: (data) =>
+                        HomeProduct(constraints: constraint, products: data),
+                    error: (object, stack) => Text('$stack.toString()'),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                   ),
                 ],
               ),
@@ -74,7 +64,8 @@ class Home extends ConsumerWidget {
                       data: (data) =>
                           HomeProduct(constraints: constraint, products: data),
                       error: (object, stack) => Text('$stack.toString()'),
-                      loading: () => const CircularProgressIndicator(),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
                     ),
                   ),
                 ],

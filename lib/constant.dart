@@ -13,6 +13,12 @@ const constantTextStyleDark = TextStyle(
 const constantSizedBoxLarge = SizedBox(
   height: 40,
 );
+const constantSizedBoxMedium = SizedBox(
+  height: 15,
+);
 const constantSizedBoxSmall = SizedBox(
   height: 12,
+);
+const constantBoxMedium = SizedBox(
+  width: 20,
 );
