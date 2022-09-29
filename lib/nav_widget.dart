@@ -21,7 +21,6 @@ class NavWidget extends StatelessWidget {
             child: ListView(
               children: [
                 buildNav("HOME", "/"),
-                buildNav("PRODUCT", "/product"),
                 buildNav("CART", "/cart"),
                 buildNav("LOGIN", "/login"),
                 buildNav("REGISTER", "/register"),
@@ -29,7 +28,7 @@ class NavWidget extends StatelessWidget {
             ),
           )
         : Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -39,9 +38,6 @@ class NavWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: buildNav("HOME", "/"),
-                      ),
-                      Expanded(
-                        child: buildNav("PRODUCT", "/product"),
                       ),
                       Expanded(
                         child: buildNav("CART", "/cart"),
@@ -91,7 +87,7 @@ class NavWidget extends StatelessWidget {
       child: Text(
         title,
         softWrap: false,
-        style: constantTextStyleLight,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       onTap: () => Navigator.pushNamed(context, navigation),
     );

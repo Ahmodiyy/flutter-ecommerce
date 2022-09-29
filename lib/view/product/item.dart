@@ -1,25 +1,41 @@
+import 'package:ecommerce/view/product/home_argument.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecommerce/extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../class/order.dart';
+import '../../class/product.dart';
 import '../../constant.dart';
-import '../../model/class/product.dart';
+import '../../model/order_repo.dart';
 
-final itemQuantityProvider = StateProvider<int>((ref) => 0);
+final itemQuantityProvider = StateProvider<int>((ref) => 1);
+final orderProvider = StateNotifierProvider<OrderRepo, List<Order>>(
+  (ref) => OrderRepo(),
+);
 
-class Item extends ConsumerWidget {
-  final BoxConstraints constraints;
-  final Product product;
+class Item extends ConsumerStatefulWidget {
+  static const item = '/item';
+
   const Item({
     super.key,
-    required this.constraints,
-    required this.product,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(itemQuantityProvider);
+  ConsumerState createState() => _ItemState();
+}
+
+class _ItemState extends ConsumerState<Item> {
+  double opacityValue = 0;
+  bool itemAlreadyAdded = false;
+  @override
+  Widget build(BuildContext context) {
+    HomeArgument homeArgument =
+        ModalRoute.of(context)!.settings.arguments as HomeArgument;
+
+    Product product = homeArgument.products;
+    int quantity = ref.watch(itemQuantityProvider);
+    List<Order> order = ref.watch(orderProvider);
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraint) {
       return constraint.isMobile
@@ -29,7 +45,7 @@ class Item extends ConsumerWidget {
                 child: Column(
                   children: [
                     buildImage(product),
-                    buildInfo(product, context, ref),
+                    buildInfo(context, product, ref, quantity, order),
                   ],
                 ),
               ),
@@ -43,7 +59,8 @@ class Item extends ConsumerWidget {
                       product,
                     ),
                   ),
-                  Expanded(child: buildInfo(product, context, ref)),
+                  Expanded(
+                      child: buildInfo(context, product, ref, quantity, order)),
                 ],
               ),
             );
@@ -51,68 +68,137 @@ class Item extends ConsumerWidget {
   }
 
   Widget buildImage(Product product) {
-    return Container(
-      width: double.infinity,
-      height: 400,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage('images/${product.image}'),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: double.infinity,
+        height: 400,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage('images/${product.image}'),
+          ),
         ),
       ),
     );
   }
 
-  Widget buildInfo(Product product, BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      height: 400,
-      child: Material(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+  Widget buildInfo(BuildContext context, Product product, WidgetRef ref,
+      int quantity, List<Order> orderList) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        height: 400,
+        child: Material(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 product.name,
-                style: constantTextStyleDark.copyWith(fontSize: 50),
+                style: Theme.of(context).textTheme.headline5,
               ),
               constantSizedBoxMedium,
-              Text(product.price.toString(), style: constantTextStyleDark),
+              Text(
+                product.price.toString(),
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
               constantSizedBoxMedium,
               Text(
                 product.description,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 7,
-                style: constantTextStyleLight.copyWith(
-                  letterSpacing: 2,
-                  wordSpacing: 3,
-                  height: 2,
-                ),
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                      letterSpacing: 2,
+                      wordSpacing: 3,
+                      height: 2,
+                    ),
               ),
               constantSizedBoxMedium,
               Row(
                 children: [
                   IconButton(
+                    padding: const EdgeInsets.all(5),
                     onPressed: () {
                       ref
                           .read(itemQuantityProvider.notifier)
-                          .update((state) => state == 0 ? state : state - 1);
+                          .update((state) => state == 1 ? state : state - 1);
                     },
-                    icon: const Icon(Icons.minimize),
+                    icon: const Text("-",
+                        style: TextStyle(
+                          fontSize: 15,
+                        )),
                   ),
-                  Text(ref.read(itemQuantityProvider).toString()),
+                  Text(quantity.toString()),
                   IconButton(
+                    padding: const EdgeInsets.all(5),
+                    color: Colors.black,
                     onPressed: () {
                       ref
                           .read(itemQuantityProvider.notifier)
                           .update((state) => state + 1);
                     },
-                    icon: const Icon(Icons.add),
+                    icon: const Text("+",
+                        style: TextStyle(
+                          fontSize: 15,
+                        )),
                   ),
                   TextButton(
-                    onPressed: () {},
-                    child: const Text('Add to cart'),
+                    onPressed: () {
+                      for (Order order in orderList) {
+                        if (order.productId == product.id) {
+                          setState(() {
+                            debugPrint('setstate');
+                            itemAlreadyAdded = true;
+                            opacityValue = 1;
+                          });
+
+                          return;
+                        }
+                      }
+                      debugPrint("create order 1");
+                      opacityValue = 1;
+                      ref.read(orderProvider.notifier).addOrder(
+                            Order(
+                              quantity: quantity,
+                              productId: product.id,
+                              price: product.price,
+                              image: product.image,
+                              name: product.name,
+                            ),
+                          );
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(constantActionColor),
+                      padding:
+                          MaterialStateProperty.all(const EdgeInsets.all(5)),
+                    ),
+                    child: const Text(
+                      'Add to cart',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  AnimatedOpacity(
+                    opacity: opacityValue,
+                    duration: const Duration(
+                      seconds: 1,
+                    ),
+                    child: itemAlreadyAdded
+                        ? const Text(
+                            'item already in cart',
+                            style: constantTextStyleRed,
+                          )
+                        : Text(
+                            'successfully added',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
                   ),
                 ],
               ),

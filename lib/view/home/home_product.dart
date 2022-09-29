@@ -1,8 +1,10 @@
 import 'package:ecommerce/extensions.dart';
+import 'package:ecommerce/view/product/home_argument.dart';
 import 'package:flutter/material.dart';
 
+import '../../class/product.dart';
 import '../../constant.dart';
-import '../../model/class/product.dart';
+
 import '../product/item.dart';
 
 class HomeProduct extends StatelessWidget {
@@ -52,26 +54,19 @@ class HomeProduct extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Item(
-                    constraints: constraints,
-                    product: product,
-                  ),
-                ),
-              );
+              Navigator.pushNamed(context, '/item',
+                  arguments: HomeArgument(products: product));
             },
           ),
           constantSizedBoxSmall,
           Text(
             product.name,
-            style: constantTextStyleDark,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
           constantSizedBoxSmall,
           Text(
             '\$${product.price.toString()}',
-            style: constantTextStyleLight,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
         ],
       ),

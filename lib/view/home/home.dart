@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import '../../model/class/product.dart';
+import '../../class/product.dart';
 import '../../model/product_repo.dart';
 import '../../nav_widget.dart';
 import 'home_product.dart';
@@ -25,7 +25,7 @@ class Home extends ConsumerWidget {
         if (constraint.isMobile) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Ecomas'),
+              title: const Text('Ecommerce'),
             ),
             endDrawer: NavWidget(context: context, constraints: constraint),
             body: SingleChildScrollView(
@@ -35,7 +35,8 @@ class Home extends ConsumerWidget {
                   products.when(
                     data: (data) =>
                         HomeProduct(constraints: constraint, products: data),
-                    error: (object, stack) => Text('$stack.toString()'),
+                    error: (object, stack) =>
+                        const Center(child: Text('Start backend server')),
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
                   ),
@@ -63,7 +64,8 @@ class Home extends ConsumerWidget {
                     child: products.when(
                       data: (data) =>
                           HomeProduct(constraints: constraint, products: data),
-                      error: (object, stack) => Text('$stack.toString()'),
+                      error: (object, stack) =>
+                          const Center(child: Text('start backend server')),
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
                     ),

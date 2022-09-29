@@ -1,4 +1,6 @@
+import 'package:ecommerce/view/cart/cart.dart';
 import 'package:ecommerce/view/home/home.dart';
+import 'package:ecommerce/view/home/home_product.dart';
 import 'package:ecommerce/view/product/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,11 +28,19 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
+
+        textTheme: const TextTheme(
+          bodyText2: TextStyle(
+            color: Color(0xff9C9B9C),
+          ),
+        ),
         primarySwatch: Colors.blue,
       ),
       initialRoute: "/",
       routes: {
         Home.home: (context) => const Home(),
+        Item.item: (context) => const Item(),
+        Cart.cart: (context) => const Cart(),
       },
     );
   }

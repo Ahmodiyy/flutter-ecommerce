@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:ecommerce/model/class/product.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
+import '../class/product.dart';
 
 class ProductRepo {
   Future<List<Product>> fetchProduct(http.Client client) async {
