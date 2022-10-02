@@ -32,10 +32,11 @@ class _ItemState extends ConsumerState<Item> {
   Widget build(BuildContext context) {
     HomeArgument homeArgument =
         ModalRoute.of(context)!.settings.arguments as HomeArgument;
-
     Product product = homeArgument.products;
+
     int quantity = ref.watch(itemQuantityProvider);
     List<Order> order = ref.watch(orderProvider);
+
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraint) {
       return constraint.isMobile

@@ -1,5 +1,6 @@
 import 'package:ecommerce/class/order.dart';
 import 'package:ecommerce/model/order_repo.dart';
+import 'package:ecommerce/view/product/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,9 +28,9 @@ const List<Text> tabs = <Text>[
     ),
   )
 ];
-final cartItemsProvider = StateNotifierProvider<OrderRepo, List<Order>>((ref) {
-  return OrderRepo();
-});
+final cartItemsProvider = StateNotifierProvider<OrderRepo, List<Order>>(
+  (ref) => OrderRepo(),
+);
 
 class Cart extends ConsumerWidget {
   static const String cart = "/cart";
