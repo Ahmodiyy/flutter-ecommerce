@@ -1,6 +1,5 @@
 import 'package:ecommerce/class/order.dart';
 import 'package:ecommerce/model/order_repo.dart';
-import 'package:ecommerce/view/product/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,6 +30,9 @@ const List<Text> tabs = <Text>[
 final cartItemsProvider = StateNotifierProvider<OrderRepo, List<Order>>(
   (ref) => OrderRepo(),
 );
+final cartProvider = Provider<List<Order>>(
+  (ref) => OrderRepo.list!,
+);
 
 class Cart extends ConsumerWidget {
   static const String cart = "/cart";
@@ -38,7 +40,7 @@ class Cart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Order> cartItems = ref.watch(cartItemsProvider);
+    List<Order> cartItems = ref.watch(cartProvider);
     print('cartItem length ${cartItems.length}');
     return LayoutBuilder(builder: (context, constraint) {
       return Padding(
