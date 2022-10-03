@@ -1,16 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
-class Register extends ConsumerStatefulWidget {
-  const Register({
+class Login extends ConsumerStatefulWidget {
+  const Login({
     Key? key,
   }) : super(key: key);
 
   @override
-  ConsumerState createState() => _RegisterState();
+  ConsumerState createState() => _LoginState();
 }
 
-class _RegisterState extends ConsumerState<Register> {
+class _LoginState extends ConsumerState<Login> {
   @override
   Widget build(BuildContext context) {
     return Container();
