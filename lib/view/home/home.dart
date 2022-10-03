@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import '../../class/product.dart';
+import '../../image.dart';
 import '../../model/product_repo.dart';
 import '../../nav_widget.dart';
 import 'home_product.dart';
@@ -80,15 +81,9 @@ class Home extends ConsumerWidget {
   }
 
   Widget homeImage() {
-    return Container(
-      width: double.infinity,
+    return const ImageBuild(
       height: 200,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage("images/home.jpg"),
-        ),
-      ),
+      imagePath: "images/home.jpg",
     );
   }
 }

@@ -11,7 +11,7 @@ import '../../model/order_repo.dart';
 
 final itemQuantityProvider = StateProvider<int>((ref) => 1);
 final orderProvider = StateNotifierProvider<OrderRepo, List<Order>>(
-  (ref) => OrderRepo(),
+  (ref) => OrderRepo.getInstance(),
 );
 
 class Item extends ConsumerStatefulWidget {
@@ -97,11 +97,11 @@ class _ItemState extends ConsumerState<Item> {
             children: [
               Text(
                 product.name,
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headline6,
               ),
               constantSizedBoxMedium,
               Text(
-                product.price.toString(),
+                '\$${product.price.toString()}',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               constantSizedBoxMedium,
@@ -127,7 +127,7 @@ class _ItemState extends ConsumerState<Item> {
                     },
                     icon: const Text("-",
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 25,
                         )),
                   ),
                   Text(quantity.toString()),
@@ -141,10 +141,10 @@ class _ItemState extends ConsumerState<Item> {
                     },
                     icon: const Text("+",
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 25,
                         )),
                   ),
-                  TextButton(
+                  ElevatedButton(
                     onPressed: () {
                       for (Order order in orderList) {
                         if (order.productId == product.id) {
@@ -169,12 +169,6 @@ class _ItemState extends ConsumerState<Item> {
                             ),
                           );
                     },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(constantActionColor),
-                      padding:
-                          MaterialStateProperty.all(const EdgeInsets.all(5)),
-                    ),
                     child: const Text(
                       'Add to cart',
                       style: TextStyle(

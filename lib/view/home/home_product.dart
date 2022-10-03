@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../class/product.dart';
 import '../../constant.dart';
 
-import '../product/item.dart';
+import '../../image.dart';
 
 class HomeProduct extends StatelessWidget {
   final BoxConstraints constraints;
@@ -43,16 +43,8 @@ class HomeProduct extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            child: Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('images/${product.image}'),
-                ),
-              ),
-            ),
+            child:
+                ImageBuild(height: 200, imagePath: 'images/${product.image}'),
             onTap: () {
               Navigator.pushNamed(context, '/item',
                   arguments: HomeArgument(products: product));

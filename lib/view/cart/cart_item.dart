@@ -2,65 +2,121 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../class/order.dart';
+import '../../image.dart';
+import '../../model/order_repo.dart';
+
+final orderProvider = StateNotifierProvider<OrderRepo, List<Order>>(
+  (ref) => OrderRepo.getInstance(),
+);
 
 class CartItem extends ConsumerWidget {
-  final List<Order> orders;
-  const CartItem(
-    this.orders, {
+  final TabController tabController;
+  const CartItem({
+    required this.tabController,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Table(
-      children: [
-        TableRow(
-          children: [
-            Text(
-              'PRODUCT',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              'PRICE',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              'QUANTITY',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            Text(
-              'DELETE',
-              style: Theme.of(context).textTheme.headline5,
-            ),
-          ],
-        ),
-        for (Order order in orders) buildRow(order)
-      ],
-    );
-  }
-
-  buildRow(Order order) {
-    print('inside buildRow');
-    return TableRow(children: [
-      Row(
+    List<Order> orders = ref.watch(orderProvider);
+    double total = 0;
+    for (var order in orders) {
+      total += order.price * order.quantity;
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+      child: Column(
         children: [
+          Table(
+            columnWidths: const <int, TableColumnWidth>{
+              0: FlexColumnWidth(2),
+            },
+            children: [
+              TableRow(
+                children: [
+                  Text(
+                    'PRODUCT',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Text(
+                    'PRICE',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Text(
+                    'QUANTITY',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Text(
+                    'DELETE',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ],
+              ),
+              for (Order order in orders) buildRow(order, ref)
+            ],
+          ),
           Container(
-            height: 20,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage("images/home.jpg"),
+            color: const Color(0xffE6E5E8),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        tabController.animateTo(1);
+                      },
+                      child: const Text('Process checkout')),
+                  const Spacer(),
+                  Column(
+                    children: [
+                      const Text('Cart total'),
+                      Text('\$${total.toString()}',
+                          style: Theme.of(context).textTheme.headline6),
+                    ],
+                  )
+                ],
               ),
             ),
           ),
-          Text(order.name),
         ],
       ),
-      Text(order.price.toString()),
-      Text(order.quantity.toString()),
-      IconButton(
-        onPressed: () {},
-        icon: const Icon(Icons.delete),
+    );
+  }
+
+  buildRow(Order order, WidgetRef ref) {
+    return TableRow(children: [
+      Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ImageBuild(
+                height: 50, width: 50, imagePath: 'images/${order.image}'),
+          ),
+          Text(order.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
+      SizedBox(
+          height: 70,
+          child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(order.price.toString()))),
+      SizedBox(
+          height: 70,
+          child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(order.quantity.toString()))),
+      SizedBox(
+        height: 70,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: IconButton(
+            onPressed: () {
+              ref.read(orderProvider.notifier).removeOrder(order.productId);
+            },
+            icon: const Icon(Icons.delete),
+          ),
+        ),
       )
     ]);
   }
