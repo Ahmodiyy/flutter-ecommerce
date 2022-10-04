@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import '../../constant.dart';
+import '../login/login.dart';
 
 class Register extends ConsumerStatefulWidget {
   static String register = '/register';
@@ -46,17 +47,18 @@ class _RegisterState extends ConsumerState<Register> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraint) {
-        return Scaffold(
-          key: scaffoldKey,
-          body: SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Padding(
-                padding: constraint.isMobile
-                    ? const EdgeInsets.all(50.0)
-                    : const EdgeInsets.symmetric(horizontal: 250),
+        return Padding(
+          padding: constraint.isMobile
+              ? const EdgeInsets.all(50.0)
+              : const EdgeInsets.symmetric(horizontal: 250, vertical: 50),
+          child: Scaffold(
+            key: scaffoldKey,
+            body: SafeArea(
+              child: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
                 child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text("Register",
@@ -64,6 +66,11 @@ class _RegisterState extends ConsumerState<Register> {
                               .textTheme
                               .headline6
                               ?.copyWith(fontSize: 30)),
+                      constantSizedBoxLarge,
+                      Text(
+                        'Email',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                       TextFormField(
                         controller: textController1,
                         autofocus: true,
@@ -71,6 +78,11 @@ class _RegisterState extends ConsumerState<Register> {
                         decoration: constantTextFieldDecoration,
                         style: Theme.of(context).textTheme.bodyText2,
                         keyboardType: TextInputType.emailAddress,
+                      ),
+                      constantSizedBoxSmall,
+                      Text(
+                        'Password',
+                        style: Theme.of(context).textTheme.headline6,
                       ),
                       TextFormField(
                         controller: textController2,
@@ -80,6 +92,11 @@ class _RegisterState extends ConsumerState<Register> {
                             labelText: 'Password', hintText: 'Password'),
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
+                      constantSizedBoxSmall,
+                      Text(
+                        'Confirm Password',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                       TextFormField(
                         controller: textController3,
                         autofocus: true,
@@ -88,6 +105,19 @@ class _RegisterState extends ConsumerState<Register> {
                             labelText: 'Confirm password',
                             hintText: 'Confirm password'),
                         style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                      constantSizedBoxSmall,
+                      GestureDetector(
+                        child: Text(
+                          'Already have an account?',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        onTap: () => Navigator.pushNamed(context, Login.login),
+                      ),
+                      constantSizedBoxSmall,
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: const Text('Register'),
                       ),
                     ],
                   ),
