@@ -9,7 +9,7 @@ import '../../class/product.dart';
 import '../../constant.dart';
 import '../../model/order_repo.dart';
 
-final itemQuantityProvider = StateProvider<int>((ref) => 1);
+final itemQuantityProvider = StateProvider.autoDispose<int>((ref) => 1);
 final orderProvider = StateNotifierProvider<OrderRepo, List<Order>>(
   (ref) => OrderRepo.getInstance(),
 );

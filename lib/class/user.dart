@@ -1,3 +1,4 @@
 class User {
-  late int id;
+  int id;
+  User({this.id = 0});
 }

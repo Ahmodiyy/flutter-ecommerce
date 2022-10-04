@@ -20,6 +20,25 @@ const constantSizedBoxMedium = SizedBox(
 const constantSizedBoxSmall = SizedBox(
   height: 10,
 );
+const constantSecondary = Color(0xffE6E5E8);
+const constantTextFieldDecoration = InputDecoration(
+  labelText: 'Email',
+  hintText: 'Email address',
+  fillColor: constantSecondary,
+  filled: true,
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.white, width: 1.0),
+    borderRadius: BorderRadius.all(Radius.circular(
+      15,
+    )),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Color(0xff4349CF), width: 1.0),
+    borderRadius: BorderRadius.all(Radius.circular(
+      15,
+    )),
+  ),
+);
 
 const constantBoxMedium = SizedBox(
   width: 20,

@@ -1,12 +1,19 @@
+import 'package:ecommerce/model/user_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../class/order.dart';
+import '../../class/user.dart';
+import '../../constant.dart';
 import '../../image.dart';
 import '../../model/order_repo.dart';
+import '../register/register.dart';
 
 final orderProvider = StateNotifierProvider<OrderRepo, List<Order>>(
   (ref) => OrderRepo.getInstance(),
+);
+final userProvider = StateNotifierProvider<UserRepo, User>(
+  (ref) => UserRepo.getInstance(),
 );
 
 class CartItem extends ConsumerWidget {
@@ -19,6 +26,7 @@ class CartItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Order> orders = ref.watch(orderProvider);
+    User user = ref.watch(userProvider);
     double total = 0;
     for (var order in orders) {
       total += order.price * order.quantity;
@@ -56,7 +64,7 @@ class CartItem extends ConsumerWidget {
             ],
           ),
           Container(
-            color: const Color(0xffE6E5E8),
+            color: constantSecondary,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
@@ -64,7 +72,9 @@ class CartItem extends ConsumerWidget {
                 children: [
                   ElevatedButton(
                       onPressed: () {
-                        tabController.animateTo(1);
+                        user.id == 0
+                            ? Navigator.pushNamed(context, Register.register)
+                            : tabController.animateTo(1);
                       },
                       child: const Text('Process checkout')),
                   const Spacer(),

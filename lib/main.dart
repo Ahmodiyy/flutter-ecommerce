@@ -1,7 +1,9 @@
 import 'package:ecommerce/view/cart/cart.dart';
 import 'package:ecommerce/view/home/home.dart';
 import 'package:ecommerce/view/home/home_product.dart';
+import 'package:ecommerce/view/login/login.dart';
 import 'package:ecommerce/view/product/item.dart';
+import 'package:ecommerce/view/register/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,6 +42,8 @@ class MyApp extends StatelessWidget {
         Home.home: (context) => const Home(),
         Item.item: (context) => const Item(),
         Cart.cart: (context) => const Cart(),
+        Login.login: (context) => const Login(),
+        Register.register: (context) => const Register(),
       },
     );
   }
