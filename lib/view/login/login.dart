@@ -75,6 +75,16 @@ class _LoginState extends ConsumerState<Login> {
                         decoration: constantTextFieldDecoration,
                         style: Theme.of(context).textTheme.bodyText2,
                         keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                              .hasMatch(value)) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
                       ),
                       constantSizedBoxSmall,
                       Text(
@@ -88,6 +98,12 @@ class _LoginState extends ConsumerState<Login> {
                         decoration: constantTextFieldDecoration.copyWith(
                             labelText: 'Password', hintText: 'Password'),
                         style: Theme.of(context).textTheme.bodyText2,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
                       ),
                       constantSizedBoxSmall,
                       GestureDetector(

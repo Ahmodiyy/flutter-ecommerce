@@ -1,9 +1,6 @@
-import 'package:ecommerce/class/order.dart';
-import 'package:ecommerce/model/order_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../objects.dart';
 import 'billing.dart';
 import 'cart_item.dart';
 import 'checkout.dart';

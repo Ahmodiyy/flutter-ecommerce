@@ -23,7 +23,7 @@ class _RegisterState extends ConsumerState<Register> {
   TextEditingController? textController3;
 
   late bool passwordVisibility2;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -52,11 +52,10 @@ class _RegisterState extends ConsumerState<Register> {
               ? const EdgeInsets.all(50.0)
               : const EdgeInsets.symmetric(horizontal: 250, vertical: 50),
           child: Scaffold(
-            key: scaffoldKey,
             body: SafeArea(
-              child: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: SingleChildScrollView(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
@@ -78,6 +77,16 @@ class _RegisterState extends ConsumerState<Register> {
                         decoration: constantTextFieldDecoration,
                         style: Theme.of(context).textTheme.bodyText2,
                         keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                              .hasMatch(value)) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
                       ),
                       constantSizedBoxSmall,
                       Text(
@@ -91,6 +100,12 @@ class _RegisterState extends ConsumerState<Register> {
                         decoration: constantTextFieldDecoration.copyWith(
                             labelText: 'Password', hintText: 'Password'),
                         style: Theme.of(context).textTheme.bodyText2,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
                       ),
                       constantSizedBoxSmall,
                       Text(
@@ -105,6 +120,12 @@ class _RegisterState extends ConsumerState<Register> {
                             labelText: 'Confirm password',
                             hintText: 'Confirm password'),
                         style: Theme.of(context).textTheme.bodyText2,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
                       ),
                       constantSizedBoxSmall,
                       GestureDetector(
@@ -116,7 +137,15 @@ class _RegisterState extends ConsumerState<Register> {
                       ),
                       constantSizedBoxSmall,
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            // If the form is valid, display a snackbar. In the real world,
+                            // you'd often call a server or save the information in a database.
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Processing Data')),
+                            );
+                          }
+                        },
                         child: const Text('Register'),
                       ),
                     ],
