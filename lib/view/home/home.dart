@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import '../../class/product.dart';
-import '../../image.dart';
+import '../../image_build.dart';
 import '../../model/product_repo.dart';
 import '../../nav_widget.dart';
 import 'home_product.dart';

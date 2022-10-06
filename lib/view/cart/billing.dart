@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../class/order.dart';
 import '../../class/user.dart';
 import '../../constant.dart';
-import '../../image.dart';
+import '../../image_build.dart';
 import '../../model/order_repo.dart';
 import '../register/register.dart';
 
@@ -114,8 +114,12 @@ class Billing extends ConsumerWidget {
                     children: [
                       ElevatedButton(
                           onPressed: () {
-                            user.id == 0
-                                ?
+                            user.id == 0 || total == 0
+                                ? ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'You\'ve not logged in or cart is empty')),
+                                  )
                                 : tabController.animateTo(2);
                           },
                           child: const Text('Place order')),

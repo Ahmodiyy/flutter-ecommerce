@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../class/product.dart';
 import '../../constant.dart';
 
-import '../../image.dart';
+import '../../image_build.dart';
 
 class HomeProduct extends StatelessWidget {
   final BoxConstraints constraints;

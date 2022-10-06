@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../class/order.dart';
 import '../../class/user.dart';
 import '../../constant.dart';
-import '../../image.dart';
+import '../../image_build.dart';
 import '../../model/order_repo.dart';
 import '../register/register.dart';
 
