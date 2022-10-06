@@ -67,8 +67,8 @@ class Cart extends ConsumerWidget {
                 CartItem(
                   tabController: tabController,
                 ),
-                Billing(),
-                Checkout(),
+                Billing(tabController: tabController),
+                const Checkout(),
               ]),
             );
           }),

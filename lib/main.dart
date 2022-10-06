@@ -1,6 +1,5 @@
 import 'package:ecommerce/view/cart/cart.dart';
 import 'package:ecommerce/view/home/home.dart';
-import 'package:ecommerce/view/home/home_product.dart';
 import 'package:ecommerce/view/login/login.dart';
 import 'package:ecommerce/view/product/item.dart';
 import 'package:ecommerce/view/register/register.dart';
@@ -30,11 +29,6 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        textTheme: const TextTheme(
-          bodyText2: TextStyle(
-            color: Color(0xffA1A3A8),
-          ),
-        ),
         primarySwatch: Colors.blue,
       ),
       initialRoute: "/",

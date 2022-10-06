@@ -37,6 +37,7 @@ dependencies:
   adaptive_components: ^0.0.7
   http: ^0.13.5
   flutter_riverpod: ^1.0.4
+  font_awesome_flutter: ^10.2.1
 
 dev_dependencies:
   flutter_test:

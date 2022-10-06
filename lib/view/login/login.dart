@@ -1,8 +1,10 @@
 import 'package:ecommerce/extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../constant.dart';
+import '../cart/cart.dart';
 import '../register/register.dart';
 
 class Login extends ConsumerStatefulWidget {
@@ -16,27 +18,26 @@ class Login extends ConsumerStatefulWidget {
 }
 
 class _LoginState extends ConsumerState<Login> {
-  TextEditingController? textController1;
-  TextEditingController? textController2;
+  TextEditingController? emailController;
+  TextEditingController? passwordController;
 
   late bool passwordVisibility1;
 
-  late bool passwordVisibility2;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
 
+  bool showProgressBar = false;
   @override
   void initState() {
     super.initState();
-    textController1 = TextEditingController();
-    textController2 = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
     passwordVisibility1 = false;
-    passwordVisibility2 = false;
   }
 
   @override
   void dispose() {
-    textController1?.dispose();
-    textController2?.dispose();
+    emailController?.dispose();
+    passwordController?.dispose();
     super.dispose();
   }
 
@@ -49,11 +50,10 @@ class _LoginState extends ConsumerState<Login> {
               ? const EdgeInsets.all(50.0)
               : const EdgeInsets.symmetric(horizontal: 250, vertical: 50),
           child: Scaffold(
-            key: scaffoldKey,
             body: SafeArea(
-              child: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: SingleChildScrollView(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
@@ -64,12 +64,8 @@ class _LoginState extends ConsumerState<Login> {
                               .headline6
                               ?.copyWith(fontSize: 30)),
                       constantSizedBoxLarge,
-                      Text(
-                        'Email',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
                       TextFormField(
-                        controller: textController1,
+                        controller: emailController,
                         autofocus: true,
                         obscureText: false,
                         decoration: constantTextFieldDecoration,
@@ -87,22 +83,38 @@ class _LoginState extends ConsumerState<Login> {
                         },
                       ),
                       constantSizedBoxSmall,
-                      Text(
-                        'Password',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      TextFormField(
-                        controller: textController2,
-                        autofocus: true,
-                        obscureText: !passwordVisibility1,
-                        decoration: constantTextFieldDecoration.copyWith(
-                            labelText: 'Password', hintText: 'Password'),
-                        style: Theme.of(context).textTheme.bodyText2,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
+                      StatefulBuilder(
+                        builder: (BuildContext context,
+                            void Function(void Function()) setState) {
+                          return TextFormField(
+                            controller: passwordController,
+                            autofocus: true,
+                            obscureText: passwordVisibility1,
+                            decoration: constantTextFieldDecoration.copyWith(
+                              labelText: 'Password',
+                              hintText: 'Password',
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    passwordVisibility1 = !passwordVisibility1;
+                                  });
+                                },
+                                child: Icon(
+                                  passwordVisibility1
+                                      ? FontAwesomeIcons.eye
+                                      : FontAwesomeIcons.eyeSlash,
+                                  size: 15.0,
+                                ),
+                              ),
+                            ),
+                            style: Theme.of(context).textTheme.bodyText2,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter some text';
+                              }
+                              return null;
+                            },
+                          );
                         },
                       ),
                       constantSizedBoxSmall,
@@ -115,8 +127,38 @@ class _LoginState extends ConsumerState<Login> {
                             Navigator.pushNamed(context, Register.register),
                       ),
                       constantSizedBoxSmall,
-                      ElevatedButton(
-                          onPressed: () {}, child: const Text('Login')),
+                      StatefulBuilder(
+                        builder: ((context, setState) => ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() => showProgressBar = true);
+                                  int status = await ref
+                                      .read(userProvider.notifier)
+                                      .login(emailController!.value.text,
+                                          passwordController!.value.text);
+                                  if (status == 0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content:
+                                              Text('User does not exists')),
+                                    );
+
+                                    ;
+                                  } else {
+                                    ref
+                                        .read(userProvider.notifier)
+                                        .setUser(status);
+
+                                    Navigator.pushNamed(context, Cart.cart);
+                                  }
+                                  setState(() => showProgressBar = false);
+                                }
+                              },
+                              child: showProgressBar
+                                  ? const CircularProgressIndicator()
+                                  : const Text('Login'),
+                            )),
+                      ),
                     ],
                   ),
                 ),
