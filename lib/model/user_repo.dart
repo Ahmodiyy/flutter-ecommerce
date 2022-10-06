@@ -13,9 +13,10 @@ class UserRepo extends StateNotifier<User> {
     return userRepoInstance ??= UserRepo._();
   }
 
-  void setUser(int id) {
-    print('id : $id');
+  void setUser(int id, String email, String password) {
     state.id = id;
+    state.email = email;
+    state.password = password;
   }
 
   Future<int> register(String email, String password) async {

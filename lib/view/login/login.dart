@@ -142,13 +142,11 @@ class _LoginState extends ConsumerState<Login> {
                                           content:
                                               Text('User does not exists')),
                                     );
-
-                                    ;
                                   } else {
-                                    ref
-                                        .read(userProvider.notifier)
-                                        .setUser(status);
-
+                                    ref.read(userProvider.notifier).setUser(
+                                        status,
+                                        emailController!.value.text,
+                                        emailController!.value.text);
                                     Navigator.pushNamed(context, Cart.cart);
                                   }
                                   setState(() => showProgressBar = false);

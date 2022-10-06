@@ -166,6 +166,7 @@ class _ItemState extends ConsumerState<Item> {
                               price: product.price,
                               image: product.image,
                               name: product.name,
+                              description: product.description,
                             ),
                           );
                     },

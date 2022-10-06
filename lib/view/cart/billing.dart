@@ -115,9 +115,8 @@ class Billing extends ConsumerWidget {
                       ElevatedButton(
                           onPressed: () {
                             user.id == 0
-                                ? Navigator.pushNamed(
-                                    context, Register.register)
-                                : tabController.animateTo(1);
+                                ?
+                                : tabController.animateTo(2);
                           },
                           child: const Text('Place order')),
                       const Spacer(),
