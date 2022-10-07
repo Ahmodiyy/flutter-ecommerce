@@ -33,6 +33,7 @@ class _RegisterState extends ConsumerState<Register> {
   final _formKey = GlobalKey<FormState>();
 
   bool showProgressBar = false;
+  String passwordCheck = '';
 
   @override
   void initState() {
@@ -71,11 +72,12 @@ class _RegisterState extends ConsumerState<Register> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text("Register",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(fontSize: 30)),
-                      constantSizedBoxLarge,
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    fontSize: 30,
+                                    color: actionColor,
+                                  )),
+                      constantSizedBoxMedium,
                       TextFormField(
                         controller: emailController,
                         autofocus: true,
@@ -100,8 +102,9 @@ class _RegisterState extends ConsumerState<Register> {
                             void Function(void Function()) setState) {
                           return TextFormField(
                             controller: passwordController,
-                            autofocus: true,
                             obscureText: passwordVisibility1,
+                            autofocus: true,
+                            style: Theme.of(context).textTheme.bodyText2,
                             decoration: constantTextFieldDecoration.copyWith(
                               labelText: 'Password',
                               hintText: 'Password',
@@ -119,9 +122,9 @@ class _RegisterState extends ConsumerState<Register> {
                                 ),
                               ),
                             ),
-                            style: Theme.of(context).textTheme.bodyText2,
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
+                              passwordCheck = value!;
+                              if (value.isEmpty) {
                                 return 'Please enter your password';
                               }
                               return null;
@@ -157,7 +160,10 @@ class _RegisterState extends ConsumerState<Register> {
                             style: Theme.of(context).textTheme.bodyText2,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your password';
+                                return 'Please confirm your password';
+                              }
+                              if (value != passwordCheck) {
+                                return 'Unmatched password';
                               }
                               return null;
                             },
@@ -178,10 +184,21 @@ class _RegisterState extends ConsumerState<Register> {
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   setState(() => showProgressBar = true);
-                                  int status = await ref
-                                      .read(userProvider.notifier)
-                                      .register(emailController!.value.text,
-                                          passwordController!.value.text);
+                                  int status = 0;
+                                  try {
+                                    status = await ref
+                                        .read(userProvider.notifier)
+                                        .register(emailController!.value.text,
+                                            passwordController!.value.text);
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('Service unavailable')),
+                                    );
+                                    setState(() => showProgressBar = false);
+                                    return;
+                                  }
+
                                   if (status == 0) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -195,7 +212,7 @@ class _RegisterState extends ConsumerState<Register> {
                                 }
                               },
                               child: showProgressBar
-                                  ? const CircularProgressIndicator()
+                                  ? indicator
                                   : const Text('Register'),
                             )),
                       ),

@@ -15,17 +15,38 @@ const constantSizedBoxLarge = SizedBox(
   height: 40,
 );
 const constantSizedBoxMedium = SizedBox(
-  height: 15,
+  height: 25,
 );
 const constantSizedBoxSmall = SizedBox(
   height: 10,
 );
 const constantSecondary = Color(0xffE6E5E8);
+const actionColor = Color(0xff4247CB);
+const s = CircularProgressIndicator(
+  color: Colors.white,
+);
+const indicator = SizedBox(
+  width: 15,
+  height: 15,
+  child: s,
+);
 const constantTextFieldDecoration = InputDecoration(
   labelText: 'Email',
   hintText: 'Email address',
   fillColor: constantSecondary,
   filled: true,
+  errorBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.white, width: 1.0),
+    borderRadius: BorderRadius.all(Radius.circular(
+      15,
+    )),
+  ),
+  focusedErrorBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.white, width: 1.0),
+    borderRadius: BorderRadius.all(Radius.circular(
+      15,
+    )),
+  ),
   enabledBorder: OutlineInputBorder(
     borderSide: BorderSide(color: Colors.white, width: 1.0),
     borderRadius: BorderRadius.all(Radius.circular(
@@ -33,7 +54,7 @@ const constantTextFieldDecoration = InputDecoration(
     )),
   ),
   focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Color(0xff4349CF), width: 1.0),
+    borderSide: BorderSide(color: actionColor, width: 1.0),
     borderRadius: BorderRadius.all(Radius.circular(
       15,
     )),

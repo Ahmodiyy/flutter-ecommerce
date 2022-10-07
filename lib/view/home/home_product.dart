@@ -29,7 +29,7 @@ class HomeProduct extends StatelessWidget {
               crossAxisCount: 3,
               crossAxisSpacing: 40,
               mainAxisSpacing: 20,
-              mainAxisExtent: 300,
+              mainAxisExtent: 350,
             ),
             children: [
               for (Product product in products) buildProduct(product, context)
@@ -44,7 +44,7 @@ class HomeProduct extends StatelessWidget {
         children: [
           GestureDetector(
             child:
-                ImageBuild(height: 200, imagePath: 'images/${product.image}'),
+                ImageBuild(height: 250, imagePath: 'images/${product.image}'),
             onTap: () {
               Navigator.pushNamed(context, '/item',
                   arguments: HomeArgument(products: product));

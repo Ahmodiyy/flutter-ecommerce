@@ -107,10 +107,12 @@ class CartItem extends ConsumerWidget {
         ],
       ),
       SizedBox(
-          height: 70,
-          child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(order.price.toString()))),
+        height: 70,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text('\$${order.price.toString()}'),
+        ),
+      ),
       SizedBox(
           height: 70,
           child: Align(

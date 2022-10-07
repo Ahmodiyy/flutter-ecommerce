@@ -16,7 +16,7 @@ class Checkout extends StatelessWidget {
               : const EdgeInsets.symmetric(horizontal: 250, vertical: 50),
           child: const ImageBuild(
             imagePath: 'images/thanks.jpg',
-            height: 200,
+            height: 50,
           ),
         );
       },

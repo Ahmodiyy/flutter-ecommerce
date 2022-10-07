@@ -37,7 +37,7 @@ class Home extends ConsumerWidget {
                     data: (data) =>
                         HomeProduct(constraints: constraint, products: data),
                     error: (object, stack) =>
-                        const Center(child: Text('Start backend server')),
+                        const Center(child: Text('Service Unavailable')),
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
                   ),
@@ -60,7 +60,7 @@ class Home extends ConsumerWidget {
                     child: homeImage(),
                   ),
                   AdaptiveContainer(
-                    height: 300,
+                    height: 350,
                     columnSpan: 12,
                     child: products.when(
                       data: (data) =>

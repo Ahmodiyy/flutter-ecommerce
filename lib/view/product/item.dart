@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:ecommerce/extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../class/order.dart';
 import '../../class/product.dart';
@@ -117,6 +118,7 @@ class _ItemState extends ConsumerState<Item> {
               ),
               constantSizedBoxMedium,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   IconButton(
                     padding: const EdgeInsets.all(5),
@@ -125,12 +127,22 @@ class _ItemState extends ConsumerState<Item> {
                           .read(itemQuantityProvider.notifier)
                           .update((state) => state == 1 ? state : state - 1);
                     },
-                    icon: const Text("-",
-                        style: TextStyle(
-                          fontSize: 25,
-                        )),
+                    icon: const Icon(
+                      FontAwesomeIcons.minus,
+                      size: 15,
+                      color: Colors.black54,
+                    ),
                   ),
-                  Text(quantity.toString()),
+                  const SizedBox(
+                    width: 3,
+                  ),
+                  Text(quantity.toString(),
+                      style: const TextStyle(
+                        fontSize: 15,
+                      )),
+                  const SizedBox(
+                    width: 3,
+                  ),
                   IconButton(
                     padding: const EdgeInsets.all(5),
                     color: Colors.black,
@@ -139,10 +151,11 @@ class _ItemState extends ConsumerState<Item> {
                           .read(itemQuantityProvider.notifier)
                           .update((state) => state + 1);
                     },
-                    icon: const Text("+",
-                        style: TextStyle(
-                          fontSize: 25,
-                        )),
+                    icon: const Icon(
+                      FontAwesomeIcons.plus,
+                      size: 15,
+                      color: Colors.black54,
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () {

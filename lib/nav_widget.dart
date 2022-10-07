@@ -16,14 +16,26 @@ class NavWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return constraints.isMobile
         ? Drawer(
-            width: 200,
+            width: 100,
             backgroundColor: Colors.white,
             child: ListView(
               children: [
-                buildNav("HOME", "/"),
-                buildNav("CART", "/cart"),
-                buildNav("LOGIN", "/login"),
-                buildNav("REGISTER", "/register"),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: buildNavForHome("HOME", "/"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: buildNav("CART", "/cart"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: buildNav("LOGIN", "/login"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: buildNav("REGISTER", "/register"),
+                ),
               ],
             ),
           )
@@ -37,7 +49,7 @@ class NavWidget extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: buildNav("HOME", "/"),
+                        child: buildNavForHome("HOME", "/"),
                       ),
                       Expanded(
                         child: buildNav("CART", "/cart"),
@@ -47,11 +59,11 @@ class NavWidget extends StatelessWidget {
                 ),
                 const Expanded(
                   flex: 6,
-                  child: Text("ECOMAS",
+                  child: Text("Ecommerce",
                       style: TextStyle(
                         color: constantActionColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30,
                       ),
                       textAlign: TextAlign.center),
                 ),
@@ -59,9 +71,6 @@ class NavWidget extends StatelessWidget {
                   flex: 5,
                   child: Row(
                     children: [
-                      const Spacer(
-                        flex: 1,
-                      ),
                       Expanded(
                         child: Align(
                           alignment: Alignment.centerRight,
@@ -88,6 +97,19 @@ class NavWidget extends StatelessWidget {
         title,
         softWrap: false,
         style: Theme.of(context).textTheme.bodyText2,
+      ),
+      onTap: () => Navigator.pushNamed(context, navigation),
+    );
+  }
+
+  Widget buildNavForHome(String title, String navigation) {
+    return GestureDetector(
+      child: Text(
+        title,
+        softWrap: false,
+        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+              color: actionColor,
+            ),
       ),
       onTap: () => Navigator.pushNamed(context, navigation),
     );

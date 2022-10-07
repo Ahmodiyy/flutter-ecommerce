@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../class/order.dart';
+import '../../class/user.dart';
+import '../../constant.dart';
+import '../../model/order_repo.dart';
+import '../../model/user_repo.dart';
 import 'billing.dart';
 import 'cart_item.dart';
 import 'checkout.dart';
@@ -44,7 +49,6 @@ class Cart extends ConsumerWidget {
                 DefaultTabController.of(context)!;
             tabController.addListener(() {
               if (!tabController.indexIsChanging) {
-                // Your code goes here.
                 // To get index of current tab use tabController.index
               }
             });
@@ -58,7 +62,7 @@ class Cart extends ConsumerWidget {
                     style: Theme.of(context)
                         .textTheme
                         .headline6
-                        ?.copyWith(fontSize: 30)),
+                        ?.copyWith(fontSize: 30, color: actionColor)),
                 bottom: const TabBar(
                   tabs: tabs,
                 ),

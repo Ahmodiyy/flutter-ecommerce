@@ -59,11 +59,12 @@ class _LoginState extends ConsumerState<Login> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text("Login",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(fontSize: 30)),
-                      constantSizedBoxLarge,
+                          style:
+                              Theme.of(context).textTheme.headline6?.copyWith(
+                                    fontSize: 30,
+                                    color: actionColor,
+                                  )),
+                      constantSizedBoxMedium,
                       TextFormField(
                         controller: emailController,
                         autofocus: true,
@@ -73,7 +74,7 @@ class _LoginState extends ConsumerState<Login> {
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
+                            return 'Please enter your email';
                           }
                           if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                               .hasMatch(value)) {
@@ -110,7 +111,7 @@ class _LoginState extends ConsumerState<Login> {
                             style: Theme.of(context).textTheme.bodyText2,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
+                                return 'Please enter your password';
                               }
                               return null;
                             },
@@ -132,10 +133,20 @@ class _LoginState extends ConsumerState<Login> {
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   setState(() => showProgressBar = true);
-                                  int status = await ref
-                                      .read(userProvider.notifier)
-                                      .login(emailController!.value.text,
-                                          passwordController!.value.text);
+                                  int status = 0;
+                                  try {
+                                    status = await ref
+                                        .read(userProvider.notifier)
+                                        .login(emailController!.value.text,
+                                            passwordController!.value.text);
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('Service unavailable')),
+                                    );
+                                    setState(() => showProgressBar = false);
+                                    return;
+                                  }
                                   if (status == 0) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -153,7 +164,7 @@ class _LoginState extends ConsumerState<Login> {
                                 }
                               },
                               child: showProgressBar
-                                  ? const CircularProgressIndicator()
+                                  ? indicator
                                   : const Text('Login'),
                             )),
                       ),
