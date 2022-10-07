@@ -4,7 +4,6 @@ import 'package:ecommerce/class/ordered_product.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import '../class/order.dart';
 import '../class/product.dart';
 
 class ProductRepo {
@@ -30,7 +29,6 @@ class ProductRepo {
         jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
     return parsed.map((json) {
-      debugPrint('movie: $json');
       return Product(
           id: json['id'],
           price: json['price'],
@@ -47,6 +45,7 @@ class ProductRepo {
       'Accept': 'application/json',
       'Access-Control-Allow-Origin': '*'
     };
+    print('userid $userId');
     final response = await client.get(
         Uri.parse(
           'http://localhost:8082/api/getOrders/$userId',

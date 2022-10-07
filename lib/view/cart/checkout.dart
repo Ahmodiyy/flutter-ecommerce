@@ -21,7 +21,7 @@ class Checkout extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final orders = ref.watch(orderedProductProvider);
     orders.when(
-        data: (data) => print(data.length),
+        data: (data) => print('product ordered ${data.length}'),
         error: (o, s) => print(s),
         loading: () => print('loading'));
     return Padding(
