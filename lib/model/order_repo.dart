@@ -51,5 +51,6 @@ class OrderRepo extends StateNotifier<List<Order>> {
         }),
       );
     }
+    state = [];
   }
 }

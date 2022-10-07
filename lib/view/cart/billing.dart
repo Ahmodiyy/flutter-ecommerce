@@ -8,7 +8,6 @@ import '../../class/user.dart';
 import '../../constant.dart';
 import '../../image_build.dart';
 import '../../model/order_repo.dart';
-import '../register/register.dart';
 
 final orderProvider = StateNotifierProvider<OrderRepo, List<Order>>(
   (ref) => OrderRepo.getInstance(),
@@ -120,7 +119,12 @@ class Billing extends ConsumerWidget {
                                         content: Text(
                                             'You\'ve not logged in or cart is empty')),
                                   )
-                                : tabController.animateTo(2);
+                                : {
+                                    ref
+                                        .read(orderProvider.notifier)
+                                        .placeOrder(),
+                                    tabController.animateTo(2),
+                                  };
                           },
                           child: const Text('Place order')),
                       const Spacer(),
