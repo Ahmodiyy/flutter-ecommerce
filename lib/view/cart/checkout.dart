@@ -5,11 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import '../../class/ordered_product.dart';
+import '../../class/user.dart';
+import '../../constant.dart';
+import '../../image_build.dart';
 import '../../model/product_repo.dart';
 
-final orderedProductProvider = FutureProvider<List<OrderedProduct>>(
-  (ref) =>
-      ProductRepo().fetchOrders(http.Client(), UserRepo.user.id.toString()),
+final userProvider = StateNotifierProvider<UserRepo, User>(
+  (ref) => UserRepo.getInstance(),
+);
+final orderedProductProvider = FutureProvider.autoDispose<List<OrderedProduct>>(
+  (ref) => ProductRepo()
+      .fetchOrders(http.Client(), ref.read(userProvider).id.toString()),
 );
 
 class Checkout extends ConsumerWidget {
@@ -20,70 +26,44 @@ class Checkout extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orders = ref.watch(orderedProductProvider);
-    orders.when(
-        data: (data) => print('product ordered ${data.length}'),
-        error: (o, s) => print(s),
-        loading: () => print('loading'));
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-      child: Column(
+      child: ListView(
         children: [
-          Table(
-            children: [
-              TableRow(
-                children: [
-                  Text(
-                    'ORDER ID',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Text(
-                    'PRODUCT ID',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Text(
-                    'QUANTITY',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                ],
-              ),
-              orders.when(
-                data: (data) {
-                  for (OrderedProduct order in data) {
-                    print(data);
-                    return buildRow(order, ref);
-                  }
-                  return const TableRow(children: [
-                    Text(''),
-                    Text(''),
-                    Text(''),
-                  ]);
-                },
-                error: (object, stack) => const TableRow(children: [
-                  Text(''),
-                  Text(''),
-                  Text(''),
-                ]),
-                loading: () => const TableRow(children: [
-                  Text(''),
-                  Text(''),
-                  Text(''),
-                ]),
-              ),
-            ],
+          orders.when(
+            data: (data) => buildTile(data),
+            error: (object, stack) =>
+                const Center(child: Text('Service Unavailable')),
+            loading: () => const Center(child: CircularProgressIndicator()),
           ),
         ],
       ),
     );
   }
 
-  buildRow(OrderedProduct order, WidgetRef ref) {
-    return TableRow(
-      children: [
-        Text(order.orderId.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold)),
-        Text('\$${order.productId.toString()}'),
-        Text(order.quantity.toString()),
-      ],
+  buildTile(List<OrderedProduct> ordered) {
+    List<Card> listListTile = [];
+
+    for (OrderedProduct orderedProduct in ordered) {
+      listListTile.add(
+        Card(
+          child: ListTile(
+            leading: ImageBuild(
+              height: 72,
+              width: 72,
+              imagePath: 'images/${orderedProduct.image}',
+            ),
+            title: Text(orderedProduct.name),
+            subtitle: Text(orderedProduct.description),
+            trailing: Text(orderedProduct.quantity.toString(),
+                style: const TextStyle(color: actionColor)),
+            isThreeLine: true,
+          ),
+        ),
+      );
+    }
+    return Column(
+      children: listListTile,
     );
   }
 }

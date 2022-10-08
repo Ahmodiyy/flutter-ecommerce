@@ -66,7 +66,7 @@ class Home extends ConsumerWidget {
                       data: (data) =>
                           HomeProduct(constraints: constraint, products: data),
                       error: (object, stack) =>
-                          const Center(child: Text('start backend server')),
+                          const Center(child: Text('Service unavailable')),
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
                     ),

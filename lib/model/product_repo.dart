@@ -63,9 +63,10 @@ class ProductRepo {
     return parsed.map((json) {
       debugPrint('movie: $json');
       return OrderedProduct(
-          orderId: json['id'],
+          image: json['product']['image'],
+          name: json['product']['name'],
           quantity: json['quantity'],
-          productId: json['product']['id']);
+          description: json['product']['description']);
     }).toList();
   }
 }
